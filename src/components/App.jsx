@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import ReactDOM from "react-dom/client"
 import axios from "axios";
 import Header from "./Header"
 import Notes from "./Notes"
@@ -9,8 +8,10 @@ import CreateArea from "./CreateArea"
 
 function App() {
 
+    //We setup our variables to manage the state of the notes we will be using.
     const [notes_data, setNotes] = useState([])
 
+    //This is used to fetch all notes already stored on page load. We also validate that we receive then in an array format.
     useEffect(() => {
         axios.get('/api/notes')
         .then(response => {
@@ -24,24 +25,21 @@ function App() {
         .catch(error => console.error('Error fetching notes: ', error))
     }, []);
 
+    //This is our submit handle function. Used to handle the submission of new notes
     const handleNoteSubmit = (note) => {
-        // setNotes((prevNotes) => [
-        //     ...prevNotes,
-        //     {...note, id: prevNotes.length}
         axios.post('/api/notes', note)
         .then(() => setNotes([...notes_data, response.data]))
         .catch(error => console.error('Error adding note: ', error))
-        // console.log(response.data)
     }
 
+    //This is our delete handle function. Used to handle the deletion of notes, based on the id of said note.
     const handleNoteDelete = (id) => {
-        // setNotes(prevNotes => prevNotes.filter(note => note.id !== id))
         axios.delete(`/api/notes/${id}`)
         .then(() => setNotes(prevNotes => prevNotes.filter(note => note.id !== id)))
         .catch(error => console.error('Error deleting note: ', error))
     }
     
-    // console.log(notes_data)
+    //Then we return all our components.
     return (
         <div>
             <Header />
